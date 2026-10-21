@@ -1,0 +1,17 @@
+# Windows 批处理必须保持 CRLF，否则在某些环境下命令解析异常
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# 文本类统一 LF，避免跨平台 diff 噪音
+*.md   text eol=lf
+*.json text eol=lf
+*.py   text eol=lf
+*.js   text eol=lf
+*.css  text eol=lf
+*.html text eol=lf
+
+# 二进制
+*.png binary
+*.jpg binary
+*.zip binary
