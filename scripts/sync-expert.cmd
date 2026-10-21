@@ -36,6 +36,18 @@ if %RC% GEQ 8 (
   exit /b 1
 )
 
+rem settings.json is required for Team-type experts. Without it the Expert
+rem Center will not display the package. robocopy /MIR occasionally drops it,
+rem so copy it unconditionally as a safety net.
+if exist "%REPO%\%EXPERT%\settings.json" (
+  copy /Y "%REPO%\%EXPERT%\settings.json" "%DEST%\%EXPERT%\" >nul
+  if errorlevel 1 (
+    echo [ERROR] Failed to copy settings.json
+    chcp %OLDCP% >nul
+    exit /b 1
+  )
+)
+
 echo.
 echo [OK] Synced repo -^> %DEST%\%EXPERT%
 echo      Restart WorkBuddy or reopen Expert Center if files were updated.
