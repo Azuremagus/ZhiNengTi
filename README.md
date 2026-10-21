@@ -25,7 +25,9 @@ WorkBuddy 只扫描固定位置：
 %USERPROFILE%\.workbuddy\plugins\marketplaces\my-experts\plugins
 ```
 
-因此协作的物理机制是：**仓库里的专家目录 ←(目录联接)→ 专家目录里的同名路径**。拉取代码后立即生效，无需手工拷贝。
+因此协作的物理机制是：**仓库里的专家包是唯一事实来源，改完用 `scripts\sync-expert.cmd` 镜像到专家目录**。拉取代码后跑一次同步，即可在自己的 WorkBuddy 里使用。
+
+> 为什么不用目录联接（junction）：官方校验脚本会把联接解析成真实路径，导致"专家不在专家目录下"的误判。镜像同步虽然多一条命令，但 100% 符合校验逻辑。
 
 ---
 
@@ -35,7 +37,7 @@ WorkBuddy 只扫描固定位置：
 
 1. **开发动作全部在 WorkBuddy 里完成。** 建专家团、改角色提示词、补技能，都在对话框里用自然语言驱动，WorkBuddy 会自动加载 `expert-manager` 技能并按规范生成文件。不需要任何人手写 `plugin.json` 的字段结构。
 2. **Git 只负责一件事：让队友拿到你建的东西。** WorkBuddy 是本地客户端，队友之间不会自动同步。
-3. **二者通过目录联接无缝衔接。** WorkBuddy 在"专家目录"里建包，而该目录实际指向本仓库，所以建完即入库，`git push` 后队友 `git pull` 就能在自己的 WorkBuddy 里看到。
+3. **二者通过同步脚本无缝衔接。** 仓库是源码，专家目录是部署镜像。`git pull` 后跑一次 `scripts\sync-expert.cmd`，WorkBuddy 立刻可用；改了仓库文件后同样跑一次同步再注册。
 
 ### 在 WorkBuddy 里开发的三种方式
 
@@ -43,9 +45,9 @@ WorkBuddy 只扫描固定位置：
 |---|---|---|
 | **对话式建包** | 直接说"帮我建一个做 XX 的专家团"，它会自动追问 4 个问题（封装形态 / 技能分发方式 / 头像 / 命名基调），答完自动生成完整专家包 | 从零起步，最快 |
 | **资料转化** | 把队里写好的 SOP、角色定义、流程文档丢给它，说"把这个转成一个专家团" | 方案已成型 |
-| **定点改文件** | 打开 `agents/xxx.md`，说"把主理人的第 2 步改成……"，它直接编辑 | 迭代打磨 |
+| **定点改文件** | 打开 `cs-research-studio/agents/xxx.md`，说"把主理人的第 2 步改成……"，它直接编辑仓库里的文件 | 迭代打磨 |
 
-> 注意：专家包必须生成到 `my-experts/plugins` 才能被 WorkBuddy 检测到，生成在其他目录会扫描不到。这正是目录联接存在的意义。
+> 注意：专家包必须存在于 `my-experts/plugins` 才能被 WorkBuddy 检测到。日常编辑一律改仓库文件，然后跑同步脚本，**不要直接改专家目录里的副本**——那是部署镜像，下次同步会被覆盖。
 
 ### 可直接粘贴的启动提示词
 
@@ -61,34 +63,44 @@ WorkBuddy 只扫描固定位置：
 
 ---
 
-## 三、开工前必须锁死的东西
+## 三、开工前必须锁死的东西（已定）
 
-以下标识符**建好之后不可修改**，改了等于重建专家包。全体成员必须在第一次提交前达成一致，并登记到下表：
+以下标识符**建好之后不可修改**，改了等于重建专家包。**本项目已于 10/21 锁定，任何人不得变更**：
 
 | 字段 | 值 | 说明 |
 |---|---|---|
-| 专家包目录名 | `TODO` | kebab-case，如 `campus-service` |
-| `plugin.json` 的 `name` | `TODO` | 与目录名一致 |
-| `agentName` | `TODO` | 等于主理人 MD 文件名（不含扩展名） |
-| `expertType` | `TODO` | 团队协作选 `team` |
-| `categoryId` | `TODO` | 从 12 个官方分类中选一个 |
+| 专家包目录名 | `cs-research-studio` | kebab-case |
+| `plugin.json` 的 `name` | `cs-research-studio` | 与目录名一致 |
+| `agentName` | `cs-research-studio-team-lead` | 等于主理人 MD 文件名（不含扩展名） |
+| `expertType` | `team` | 团队协作 |
+| `categoryId` | `02-Engineering` | 计算机大类科研，核心产出为实验与代码；若突出写作可议但不建议 |
 
-> 违反这条规则的代价是整包返工。任何涉及上述字段的变更，必须先在群里同步、由队长确认，再动文件。
+团队角色（花名 / 职能 / Agent ID = agents/ 下 MD 文件名）：
+
+| Agent ID | 花名 | 职能 | 归口人 |
+|---|---|---|---|
+| cs-research-studio-team-lead | 陶思源 | 科研总规划（主理人） | 队长 |
+| literature-scout | 文渊博 | 文献调研专家 | 待认领 |
+| experiment-designer | 魏实证 | 实验设计专家 | 待认领 |
+| academic-writer | 章成文 | 学术写作专家 | 待认领 |
+
+> 违反命名规则的代价是整包返工。任何涉及上述字段的变更，必须先在群里同步、由队长确认，再动文件。
 
 ---
 
 ## 四、文件归属表（禁止越界修改）
 
-`plugin.json` 只有一份，多人同时编辑必然冲突。因此实行**归口人制度**：
+`plugin.json` 只有一份，多人同时编辑必然冲突。因此实行**归口人制度**（本项目）：
 
 | 文件/目录 | 归口人 | 其他人怎么做 |
 |---|---|---|
-| `plugin.json` | 队长 | 只提需求，不直接改 |
-| `agents/<主理人>.md` | 队长 | 只提建议 |
-| `agents/<角色A>.md` | 成员 B | 只改自己那份 |
-| `agents/<角色B>.md` | 成员 C | 只改自己那份 |
-| `skills/<技能名>/` | 成员 D | 一人一目录 |
-| `docs/`、展示页 | 成员 D | — |
+| `cs-research-studio/.codebuddy-plugin/plugin.json` | 队长 | 只提需求，不直接改 |
+| `agents/cs-research-studio-team-lead.md` | 队长 | 只提建议 |
+| `agents/literature-scout.md` | 待认领 | 只改自己那份 |
+| `agents/experiment-designer.md` | 待认领 | 只改自己那份 |
+| `agents/academic-writer.md` | 待认领 | 只改自己那份 |
+| `skills/<技能名>/`（后续新增） | 一人一目录 | 一人一目录 |
+| `docs/`、展示页、录屏 | 待认领 | — |
 
 **原则：按文件切分，不按"功能"切分。** 一个人可以认领多个文件，但一个文件只能有一个归口人。
 
@@ -100,27 +112,26 @@ WorkBuddy 只扫描固定位置：
 
 ```bash
 git pull                                   # 1. 先同步，避免基于旧版本改
-# 2. 修改自己认领的文件
-python scripts/validate_expert.py <专家目录>   # 3. 校验
-python scripts/register_expert.py <专家目录>   # 4. 注册（不跑专家中心看不到）
-git add -A && git commit -m "feat: xxx" && git push   # 5. 提交
+# 2. 修改自己认领的文件（一律改仓库里的文件）
+scripts\sync-expert.cmd cs-research-studio  # 3. 镜像到专家目录
+python <expert-manager>/scripts/validate_expert.py "%USERPROFILE%\.workbuddy\plugins\marketplaces\my-experts\plugins\cs-research-studio"   # 4. 校验
+python <expert-manager>/scripts/register_expert.py "%USERPROFILE%\.workbuddy\plugins\marketplaces\my-experts\plugins\cs-research-studio"   # 5. 注册（不跑专家中心看不到）
+git add -A && git commit -m "feat: xxx" && git push   # 6. 提交
 ```
 
-`validate_expert.py` / `register_expert.py` 来自 `expert-manager` 技能目录，首次使用需复制到本仓库 `scripts/` 下。
+`expert-manager` 脚本路径：`<WorkBuddy 安装目录>\resources\app.asar.unpacked\resources\plugins\workbuddy-builtin\skills\expert-manager\scripts\`。本机完整路径太长，建议像 `check-env.cmd` 一样每人记一份；或将其复制到本仓库 `scripts\expert-manager\` 固定使用（推荐，版本随仓库走）。
 
 ---
 
 ## 六、环境准备（每台机器只做一次）
 
-### 1. 建专家目录并链接仓库
+### 1. 同步仓库专家包到本机
 
 ```cmd
-scripts\link-expert.cmd <expert-name>
+scripts\sync-expert.cmd cs-research-studio
 ```
 
-脚本会：创建 `my-experts/plugins` 目录 → 建目录联接指向本仓库中的专家目录 → 打印结果。
-
-> 目录联接是 Windows 的 `mklink /J`，只对目录有效，不需要管理员权限。删除联接用 `scripts\unlink-expert.cmd`，**它只删链接，不动仓库文件**。
+脚本会把仓库中的 `cs-research-studio/` 镜像到 `my-experts/plugins/`（自动创建目录），之后跑校验与注册即可。
 
 ### 2. 自检
 
@@ -128,7 +139,7 @@ scripts\link-expert.cmd <expert-name>
 scripts\check-env.cmd
 ```
 
-检查 git、python、专家目录、联接状态四项。
+检查 git、python、专家目录、同步状态、仓库根、remote 六项。
 
 ---
 

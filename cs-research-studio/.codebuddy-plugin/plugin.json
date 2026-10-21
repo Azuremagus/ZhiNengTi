@@ -1,0 +1,82 @@
+{
+  "name": "cs-research-studio",
+  "version": "1.0.0",
+  "description": "A multi-agent team for computer science research: literature survey, innovation positioning, experiment design, and academic writing, with quality gates at every stage.",
+  "author": {
+    "name": "Campus AI Team",
+    "email": "campus-ai-team@example.com"
+  },
+  "agents": [
+    "./agents/cs-research-studio-team-lead.md",
+    "./agents/literature-scout.md",
+    "./agents/experiment-designer.md",
+    "./agents/academic-writer.md"
+  ],
+
+  "expertType": "team",
+  "agentName": "cs-research-studio-team-lead",
+  "teamInfo": {
+    "leadAgent": "cs-research-studio-team-lead",
+    "memberAgents": ["literature-scout", "experiment-designer", "academic-writer"]
+  },
+
+  "displayName": {
+    "en": "CS Research Studio",
+    "zh": "CS 科研工坊"
+  },
+  "profession": {
+    "en": "CS Research Studio",
+    "zh": "CS 科研工坊"
+  },
+  "displayDescription": {
+    "en": "A multi-agent team covering the full CS research pipeline: literature survey, innovation positioning, experiment design, reproducible code, and academic writing, orchestrated by a lead agent with stage-level quality gates.",
+    "zh": "面向计算机大类科研全流程：调研文献、定位创新点、设计实验、复现代码、打磨论文，多角色协作一站式交付。"
+  },
+  "avatar": "avatars/team.jpg",
+  "categoryId": "02-Engineering",
+  "defaultInitPrompt": {
+    "zh": "我打算研究「课题名」，请团队帮我完成从文献调研到实验设计的开题准备",
+    "en": "I'm working on [topic]. Help my team prepare a research proposal from literature survey to experiment design."
+  },
+  "plugin": "cs-research-studio",
+  "tags": [
+    { "en": "Literature Survey", "zh": "文献调研" },
+    { "en": "Experiment Design", "zh": "实验设计" },
+    { "en": "Academic Writing", "zh": "学术写作" }
+  ],
+  "quickPrompts": [
+    { "en": "I'm working on [topic]. Help my team prepare a research proposal from literature survey to experiment design.", "zh": "我打算研究「课题名」，请团队帮我完成从文献调研到实验设计的开题准备" },
+    { "en": "Compare retrieval-augmented methods from the last three years and help me find a feasible innovation point.", "zh": "对比近三年的检索增强方法，帮我定位一个可落地的创新点" },
+    { "en": "Given these experiment results, write the experiment section of my paper and check the wording.", "zh": "根据这组实验结果，帮我把论文实验章节写出来并检查表述" }
+  ],
+  "members": [
+    {
+      "id": "cs-research-studio-team-lead",
+      "displayName": { "en": "Tao", "zh": "陶思源" },
+      "profession": { "en": "Research Director", "zh": "科研总规划" },
+      "avatar": "avatars/cs-research-studio-team-lead.jpg",
+      "role": "lead"
+    },
+    {
+      "id": "literature-scout",
+      "displayName": { "en": "Wen", "zh": "文渊博" },
+      "profession": { "en": "Literature Researcher", "zh": "文献调研专家" },
+      "avatar": "avatars/literature-scout.jpg",
+      "role": "member"
+    },
+    {
+      "id": "experiment-designer",
+      "displayName": { "en": "Wei", "zh": "魏实证" },
+      "profession": { "en": "Experiment Designer", "zh": "实验设计专家" },
+      "avatar": "avatars/experiment-designer.jpg",
+      "role": "member"
+    },
+    {
+      "id": "academic-writer",
+      "displayName": { "en": "Zhang", "zh": "章成文" },
+      "profession": { "en": "Academic Writer", "zh": "学术写作专家" },
+      "avatar": "avatars/academic-writer.jpg",
+      "role": "member"
+    }
+  ]
+}

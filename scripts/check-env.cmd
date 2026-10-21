@@ -47,15 +47,14 @@ echo [4] experts in plugins directory
 if exist "%DEST%" (
   set "ANY="
   for /d %%d in ("%DEST%\*") do (
-    fsutil reparsepoint query "%%d" >nul 2>&1
-    if errorlevel 1 (
-      echo     [REAL] %%~nxd   - not linked to repo, edits will not sync
+    if exist "%REPO%\%%~nxd\" (
+      echo     [SYNCED] %%~nxd   - managed by this repo (run sync-expert.cmd to update)
     ) else (
-      echo     [LINK] %%~nxd   - synced with repo
+      echo     [LOCAL ] %%~nxd   - not from this repo, edits will not sync
     )
     set "ANY=1"
   )
-  if not defined ANY echo     none yet
+  if not defined ANY echo     none yet - run scripts\sync-expert.cmd
 ) else (
   echo     skipped
 )
