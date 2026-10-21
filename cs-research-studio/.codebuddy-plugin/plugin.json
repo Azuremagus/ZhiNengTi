@@ -1,7 +1,7 @@
 {
   "name": "cs-research-studio",
-  "version": "1.0.0",
-  "description": "A multi-agent team for computer science research: literature survey, innovation positioning, experiment design, and academic writing, with quality gates at every stage.",
+  "version": "1.1.0",
+  "description": "A multi-agent team for computer science research with human-in-the-loop gates: literature search/download/translation/reading, innovation positioning, experiment design, Linux environment setup, academic writing, and a built-in CS knowledge base.",
   "author": {
     "name": "Campus AI Team",
     "email": "campus-ai-team@example.com"
@@ -29,8 +29,8 @@
     "zh": "CS 科研工坊"
   },
   "displayDescription": {
-    "en": "A multi-agent team covering the full CS research pipeline: literature survey, innovation positioning, experiment design, reproducible code, and academic writing, orchestrated by a lead agent with stage-level quality gates.",
-    "zh": "面向计算机大类科研全流程：调研文献、定位创新点、设计实验、复现代码、打磨论文，多角色协作一站式交付。"
+    "en": "Full CS research pipeline with human-in-the-loop: literature search, download, translation and reading; innovation positioning; experiment design and Linux environment setup; academic writing; built-in CS knowledge base.",
+    "zh": "计算机科研全流程：检索翻译文献、定位创新点、设计实验、配置环境、打磨论文，内置领域知识库，人在回路"
   },
   "avatar": "avatars/team.jpg",
   "categoryId": "02-Engineering",
@@ -47,33 +47,33 @@
   "quickPrompts": [
     { "en": "I'm working on [topic]. Help my team prepare a research proposal from literature survey to experiment design.", "zh": "我打算研究「课题名」，请团队帮我完成从文献调研到实验设计的开题准备" },
     { "en": "Compare retrieval-augmented methods from the last three years and help me find a feasible innovation point.", "zh": "对比近三年的检索增强方法，帮我定位一个可落地的创新点" },
-    { "en": "Given these experiment results, write the experiment section of my paper and check the wording.", "zh": "根据这组实验结果，帮我把论文实验章节写出来并检查表述" }
+    { "en": "Set up a PyTorch GPU experiment environment on my new Linux server and give me a reproducible environment report.", "zh": "帮我在新的 Linux 服务器上配置 PyTorch GPU 实验环境，并输出可复现的环境说明" }
   ],
   "members": [
     {
       "id": "cs-research-studio-team-lead",
-      "displayName": { "en": "Tao", "zh": "陶思源" },
+      "displayName": { "en": "Research Director", "zh": "科研总规划" },
       "profession": { "en": "Research Director", "zh": "科研总规划" },
       "avatar": "avatars/cs-research-studio-team-lead.jpg",
       "role": "lead"
     },
     {
       "id": "literature-scout",
-      "displayName": { "en": "Wen", "zh": "文渊博" },
+      "displayName": { "en": "Literature Researcher", "zh": "文献调研专家" },
       "profession": { "en": "Literature Researcher", "zh": "文献调研专家" },
       "avatar": "avatars/literature-scout.jpg",
       "role": "member"
     },
     {
       "id": "experiment-designer",
-      "displayName": { "en": "Wei", "zh": "魏实证" },
+      "displayName": { "en": "Experiment Designer", "zh": "实验设计专家" },
       "profession": { "en": "Experiment Designer", "zh": "实验设计专家" },
       "avatar": "avatars/experiment-designer.jpg",
       "role": "member"
     },
     {
       "id": "academic-writer",
-      "displayName": { "en": "Zhang", "zh": "章成文" },
+      "displayName": { "en": "Academic Writer", "zh": "学术写作专家" },
       "profession": { "en": "Academic Writer", "zh": "学术写作专家" },
       "avatar": "avatars/academic-writer.jpg",
       "role": "member"
